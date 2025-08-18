@@ -10,6 +10,8 @@ import json
 
 URL = "https://api.apilayer.com/exchangerates_data/convert"
 API_KEY = "QM1GnBohgzwIoVigK2I4ttSv86H0VoFD"
+STOCK_API_URL = 'https://www.alphavantage.co/query'
+STOCK_API_KEY = '<YOUR_ALPHA_VANTAGE_API_KEY>'
 
 def get_time_for_greeting():
    """
@@ -143,10 +145,29 @@ def get_currency(path_to_json: str) -> list[dict]:
 
 
 def get_stock(path_to_json: str) -> list[dict]:
-    stock_rates = []
+    """
+           Функция принимает на вход путь к json и возвращает цену акции
+       """
+    stock_prices = []
     with open(path_to_json, "r", encoding="utf-8") as file:
         data = json.load(file)
         stocks = data['user_stocks']
 
         for stock in stocks:
-            pass
+            # Запрашиваем последнюю цену акции
+            payload = {
+                'function': 'GLOBAL_QUOTE',
+                'symbol': stock,
+                'apikey': STOCK_API_KEY
+            }
+            response = requests.get(STOCK_API_URL, params=payload)
+            try:
+                data = response.json()['Global Quote']['05. price']
+                stock_prices.append({'stock': stock, 'price': float(data)})
+            except KeyError:
+                print(f'Ошибка при получении данных для {stock}')
+
+        return stock_prices
+
+
+

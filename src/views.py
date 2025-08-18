@@ -6,8 +6,9 @@ from utils import (
     get_path_and_period,
     get_card_with_spend,
     get_top_transactions,
-    get_currency
+    get_currency,
     get_stock
+
 )
 
 
