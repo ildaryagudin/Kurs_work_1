@@ -1,6 +1,6 @@
 import json
 from typing import Dict, Any
-from utils import (
+from src.utils import (
     get_time_for_greeting,
     get_data_time,
     get_path_and_period,
